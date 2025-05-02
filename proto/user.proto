@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package user;
+
+import "google/api/annotations.proto";
+option go_package = "github.com/dzaakk/simple-grpc-app/proto/user";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (StandardResponse) {
+    option (google.api.http) = {
+      post: "/users/user"
+      body: "*"
+    };
+  }
+
+  rpc UpdateUser(UpdateUserRequest) returns (StandardResponse) {
+    option (google.api.http) = {
+      put: "/users/user"
+      body: "*"
+    };
+  }
+
+  rpc DeleteUser(DeleteUserRequest) returns (StandardResponse) {
+    option (google.api.http) = {
+      delete: "/users/user/{user_id}"
+    };
+  }
+
+  rpc GetAllUsers(Empty) returns (GetAllUsersResponse) {
+    option (google.api.http) = {
+      get: "/users/user"
+    };
+  }
+  
+  rpc Login(LoginRequest) returns (AuthResponse) {
+    option (google.api.http) = {
+      post: "/auth/login"
+      body: "*"
+    };
+  }
+
+  rpc Logout(LogoutRequest) returns (StandardResponse) {
+    option (google.api.http) = {
+      post: "/auth/logout"
+      body: "*"
+    };
+  }
+}
+
+
+
+message Empty {}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message UpdateUserRequest {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message DeleteUserRequest {
+  string user_id = 1;
+}
+
+message GetAllUsersResponse {
+  string status = 1;
+  string message = 2;
+  repeated User data = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message AuthResponse {
+  string status = 1;
+  string message = 2;
+  string token = 3;
+}
+
+message StandardResponse {
+  string status = 1;
+  string message = 2;
+}
